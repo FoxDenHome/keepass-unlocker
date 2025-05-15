@@ -7,11 +7,10 @@ import (
 	"os/exec"
 )
 
-// tpm2_createprimary -c ~/.tpm/primary.ctx -Q
-// tpm2_createpolicy -Q --policy-pcr -l sha256:7 -L ~/.tpm/pcr7.policy
-// echo 'PASSWORD' | tpm2_create -C ~/.tpm/primary.ctx -L ~/.tpm/pcr7.policy -i- -c ~/.tpm/keepass.ctx -Q
+// systemd-ask-password -n | systemd-creds --tpm2-pcrs=7+15 --user --with-key=host+tpm2 encrypt - ~/.tpm/keepassxc
+// systemd-creds --user decrypt ~/.tpm/keepassxc
 func getPassword() ([]byte, error) {
-	proc := exec.Command("/usr/bin/tpm2_unseal", "-c", "/home/doridian/.tpm/keepass.ctx", "-p", "pcr:sha256:7")
+	proc := exec.Command("/usr/bin/systemd-creds", "--user", "decrypt", "~/.tpm/keepassxc")
 	proc.Stderr = os.Stderr
 	stdout, err := proc.StdoutPipe()
 	if err != nil {
