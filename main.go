@@ -10,7 +10,7 @@ import (
 // systemd-ask-password -n | systemd-creds --tpm2-pcrs=7+15 --user --with-key=host+tpm2 encrypt - ~/.tpm/keepassxc
 // systemd-creds --user decrypt ~/.tpm/keepassxc
 func getPassword() ([]byte, error) {
-	proc := exec.Command("/usr/bin/systemd-creds", "--user", "decrypt", "~/.tpm/keepassxc")
+	proc := exec.Command("/usr/bin/systemd-creds", "--user", "decrypt", "/home/doridian/.tpm/keepassxc")
 	proc.Stderr = os.Stderr
 	stdout, err := proc.StdoutPipe()
 	if err != nil {
